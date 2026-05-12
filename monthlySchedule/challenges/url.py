@@ -2,10 +2,9 @@ from django.urls import path
 
 from . import views
 
-# urlpatterns is a list of urls that represents the urls for this particular app.
 urlpatterns = [
-# path is a function that takes a url pattern and a view function as arguments and creates a url pattern for the app.
-# the name argument is used to give a name to the url pattern so that we can use it in the templates and other places.
-# <month> is a variable that we will use to capture the month from the url and pass it to the view function.
-    path('<month>', views.monthly_challenge, name='month-challenge')
+    # says - if the url is an integer then call the monthly_challenge_by_number function and pass the month as an argument
+    # all the data types used are defined in the django documentation - https://docs.djangoproject.com/en/6.0/topics/http/urls/#path-converters
+    path('<int:month>', views.monthly_challenge_by_number, name='int-month-challenge'),
+    path('<str:month>', views.monthly_challenge, name='month-challenge')
 ]

@@ -15,3 +15,11 @@ def monthly_challenge(request, month):
         return HttpResponse(monthlyChallenges[month])
     else:
         return HttpResponseNotFound('This month is not supported')
+    
+def monthly_challenge_by_number(request, month):
+    months = (list)(monthlyChallenges.keys())
+    if month > len(months):
+        return HttpResponseNotFound('This month is not supported')
+    else:
+        month_name = months[month - 1]
+        return HttpResponse(monthlyChallenges[month_name])

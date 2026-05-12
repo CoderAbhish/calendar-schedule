@@ -56,3 +56,22 @@ def monthly_challenge(request, month):
     else:
         return HttpResponseNotFound('This month is not supported')
 ```
+
+### Commit 3 - Path Converters
+#### 1. Use path converters (https://docs.djangoproject.com/en/6.0/topics/http/urls/#path-converters) to route to specific View methods based on Route parameter data type:  ***challenges/url.py***
+```python
+urlpatterns = [
+    path('<int:month>', views.monthly_challenge_by_number, name='int-month-challenge'),
+    path('<str:month>', views.monthly_challenge, name='month-challenge')
+]
+```
+#### 2. Modify the View methods accordingly: ***challenges/views.py***
+```python
+def monthly_challenge_by_number(request, month):
+    months = (list)(monthlyChallenges.keys())
+    if month > len(months):
+        return HttpResponseNotFound('This month is not supported')
+    else:
+        month_name = months[month - 1]
+        return HttpResponse(monthlyChallenges[month_name])
+```
