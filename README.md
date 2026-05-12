@@ -75,3 +75,18 @@ def monthly_challenge_by_number(request, month):
         month_name = months[month - 1]
         return HttpResponse(monthlyChallenges[month_name])
 ```
+
+### Commit 4 - Reverse and Route Redirection
+#### 1. Reverse: https://docs.djangoproject.com/en/6.0/topics/http/urls/#reverse-resolution-of-urls 
+```python
+#challenges/views.py
+redirect_path = reverse('month-challenge', args=[month_name]
+
+#challenges/url.py
+path('<str:month>', views.monthly_challenge, name='month-challenge')
+```
+#### 2. Redirection: https://docs.djangoproject.com/en/6.0/topics/http/shortcuts/#redirect
+```python
+#challenges/views.py
+return HttpResponseRedirect(redirect_path)
+```
