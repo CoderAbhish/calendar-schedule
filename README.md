@@ -90,3 +90,24 @@ path('<str:month>', views.monthly_challenge, name='month-challenge')
 #challenges/views.py
 return HttpResponseRedirect(redirect_path)
 ```
+
+### Commit 5 - Returning HTML
+#### 1. Returning HTML as response: https://docs.djangoproject.com/en/6.0/topics/http/views/#returning-an-httpresponse-object
+```python
+#challenges/views.py
+def index(request):
+    months = list(monthlyChallenges.keys())
+    template_inner = ''
+    for month in months:
+        hyperlink = reverse('month-challenge', args=[month])
+        template_inner += f'<li><a href="{hyperlink}"><h3>{month}</h3></a></li>\n'
+    template = f'<ul>{template_inner}</ul>'
+    return HttpResponse(template)
+
+#challenges/url.py
+urlpatterns = [
+    # the actual route is /challenges/
+    path('', views.index),
+    ...
+]
+```

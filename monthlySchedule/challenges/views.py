@@ -11,6 +11,15 @@ monthlyChallenges = {
     'june': 'This is the June month Challenge'
 }
 
+def index(request):
+    months = list(monthlyChallenges.keys())
+    template_inner = ''
+    for month in months:
+        hyperlink = reverse('month-challenge', args=[month])
+        template_inner += f'<li><a href="{hyperlink}"><h3>{month}</h3></a></li>\n'
+    template = f'<ul>{template_inner}</ul>'
+    return HttpResponse(template)
+
 def monthly_challenge(request, month):
     if month in monthlyChallenges:
         return HttpResponse(monthlyChallenges[month])
