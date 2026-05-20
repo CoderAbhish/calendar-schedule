@@ -1,12 +1,12 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h2 style="color: red;">
-        Incorrect Month or Challenges for this month has not been added yet. Please check back later.
-    </h2>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block page_title %}
+    Error!
+{% endblock page_title %}
+
+{% block content %}
+    {% include "includes/header.html" %}
+    <h3 style="color: red;">
+        Invalid month name! Please try again.
+    </h3>
+{% endblock content %}

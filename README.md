@@ -174,6 +174,7 @@ def monthly_challenge_by_number(request, month):
 
 ```
 #### 4. This still won't render because the loader is not able to find the template since we have not specified the path of the template in the settings.py file. We can make this work by following two methods:
+![alt text](README_STATIC/m2c1.png)
 **Option 1:** Load the template path within a list of Keys **TEMPLATES (Key -> 'DIRS')** in **settings.py**
 ```python
 # monthlySchedule/settings.py
@@ -261,4 +262,73 @@ def monthly_challenge(request, month):
     </li>
 </body>
 </html>
+```
+### Commit 3 - Tags, Filters, Template Inheritance and Including Partial Template Snippets
+#### 1. Tags and Filters - https://docs.djangoproject.com/en/6.0/ref/templates/builtins/
+```django
+<!-- challenges/challenges.html -->
+{% if text is not NONE %} 
+    {{ text }}
+{% else %}
+    <span style="color: red;">
+        No challenge for this month.
+    </span>
+{% endif %}
+
+<!-- challenges/index.html -->
+{% for month in months %}
+    <li>
+        <h3><a href="{% url 'month-challenge' month %}">
+            {{ month|title }}
+        </a></h3>
+    </li>
+{% endfor %}
+```
+#### 2. Template Inheritance - https://docs.djangoproject.com/en/6.0/ref/templates/language/#template-inheritance
+```html
+<!-- templates/base.html -->
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block page_title %}{% endblock page_title %}</title>
+</head>
+<body>
+    {% block content %}{% endblock content %}
+</body>
+</html>
+```
+```django
+<!-- Extend the base template for all the other html files -->
+<!-- challenges/index.html -->
+{% extends "base.html" %}
+
+{% block page_title %}
+    ...
+{% endblock page_title %}
+
+{% block content %}
+    ...
+{% endblock content %}
+<!-- challenges/challenges.html -->
+<!-- challenges/default.html -->
+
+```
+#### 3. Including Partial Template Snippets - https://docs.djangoproject.com/en/6.0/ref/templates/language/#template-partials
+```html
+<!-- Include a component/block etc that needs to used in multiple pages -->
+<!-- templates/includes/header.html -->
+<header>
+    <a href="{% url 'index' %}">&larr;All Monthly Challenges</a>
+</header>
+```
+```django
+<!-- Include the component/block -->
+<!-- challenges/challenges.html and challenges/default.html -->
+{% block content %}
+    {% include "includes/header.html" %}
+    ...
+{% endblock content %}
+
 ```

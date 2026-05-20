@@ -1,15 +1,21 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ month_name }} Challenges</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block page_title %}
+    {{ month_name|title }} Challenge
+{% endblock page_title %}
+
+{% block content %}
+    {% include "includes/header.html" %}
     <h2>
-        Challenge for {{ month_name }}!
+        Challenge for {{ month_name|title }}!
     </h2>
     <li>
-        {{ text }}
+        {% if text is not NONE %} 
+            {{ text }}
+        {% else %}
+            <span style="color: red;">
+                No challenge for this month.
+            </span>
+        {% endif %}
     </li>
-</body>
-</html>
+{% endblock content %}

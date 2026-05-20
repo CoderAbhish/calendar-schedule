@@ -9,26 +9,20 @@ monthlyChallenges = {
     'march': 'This is the March month Challenge',
     'april': 'This is the April month Challenge',
     'may': 'This is the May month Challenge',
-    'june': 'This is the June month Challenge'
+    'june': 'This is the June month Challenge',
+    'july': None,
+    'august': 'This is the August month Challenge',
 }
 
 def index(request):
     months = list(monthlyChallenges.keys())
-    template_inner = ''
-    for month in months:
-        hyperlink = reverse('month-challenge', args=[month])
-        template_inner += f'<li><a href="{hyperlink}"><h3>{month}</h3></a></li>\n'
-    template = f'<ul>{template_inner}</ul>'
-    return HttpResponse(template)
+
+    return render(request, 'challenges/index.html', {
+        'months': months
+        })
 
 def monthly_challenge(request, month):
     if month in monthlyChallenges:
-        # _template = render_to_string('challenges/challenges.html', {
-        #     'text': monthlyChallenges[month],
-        #     'month_name': month
-        # })
-        # return HttpResponse(_template)
-
         # remember that render function is a shortcut function that combines the render_to_string and HttpResponse functions
         return render(request, 'challenges/challenges.html', {
             'text': monthlyChallenges[month],
