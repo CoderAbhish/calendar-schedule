@@ -111,3 +111,101 @@ urlpatterns = [
     ...
 ]
 ```
+
+## Module 2 - Working with Templates and Static files
+### Commit 1 - Adding and Registering Templates
+#### 1. Adding HTML file to subfolder (create the subfolder). Path: **\<app\>/templates/<dir_appNamed>** e.g. -> *challenges/templates/challenges*
+#### 2. Create **challenges.html** and **default.html** within the subfolder and populate it with your html code
+```html
+<!-- challenges/templates/challenges.html -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Challenges</title>
+</head>
+<body>
+    <h2>
+        Let's assume this is the challenges page. We will be displaying all the challenges here.
+    </h2>
+</body>
+</html>
+
+<!-- challenges/templates/default.html -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2 style="color: red;">
+        Incorrect Month or Challenges for this month has not been added yet. Please check back later.
+    </h2>
+</body>
+</html>
+
+```
+#### 3. Render these HTML pages on view - https://docs.djangoproject.com/en/6.0/topics/templates/#django.template.loader.render_to_string
+```python
+# challenges/views.py
+...
+from django.template.loader import render_to_string
+
+...
+def monthly_challenge(request, month):
+    if month in monthlyChallenges:
+        # render_to_string function is used to render the template and return the rendered template as a string
+        _template = render_to_string('challenges/challenges.html')
+        return HttpResponse(_template)
+    else:
+        _template = render_to_string('challenges/default.html')
+        return HttpResponseNotFound(_template)
+    
+def monthly_challenge_by_number(request, month):
+    months = (list)(monthlyChallenges.keys())
+    if month > len(months):
+        _template = render_to_string('challenges/default.html')
+        return HttpResponseNotFound(_template)
+    else:
+        month_name = months[month - 1]
+        redirect_path = reverse('month-challenge', args=[month_name]) 
+        return HttpResponseRedirect(redirect_path)
+
+```
+#### 4. This still won't render because the loader is not able to find the template since we have not specified the path of the template in the settings.py file. We can make this work by following two methods:
+**Option 1:** Load the template path within a list of Keys **TEMPLATES (Key -> 'DIRS')** in **settings.py**
+```python
+# monthlySchedule/settings.py
+TEMPLATES = [
+    {
+        ...
+        # we are telling django to look for the templates in the challenges/templates folder
+        # dirs is a list of directories where django will look for the templates
+        'DIRS': [
+            BASE_DIR / 'challenges/templates'
+        ],
+        ...
+    },
+]
+```
+**Option 2:** Register the app **challenges** within the list **INSTALLED_APPS** in **settings.py**
+```python
+# monthlySchedule/settings.py
+
+# Installed apps is a list of all the apps that are installed in our project and we want to use in our project
+INSTALLED_APPS = [
+    'challenges',
+    ...
+]
+
+TEMPLATES = [
+    {
+        ...
+        # we are telling django to look for the templates in the app folders as well
+        # app_dirs is a boolean value that tells django to look for the templates in the app folders as well
+        'APP_DIRS': True,
+        ...
+    },
+]
+```

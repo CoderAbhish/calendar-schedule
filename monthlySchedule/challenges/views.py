@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse
+from django.template.loader import render_to_string
 
 monthlyChallenges = {
     'january': 'This is the January month Challenge',
@@ -22,14 +23,18 @@ def index(request):
 
 def monthly_challenge(request, month):
     if month in monthlyChallenges:
-        return HttpResponse(monthlyChallenges[month])
+        _template = render_to_string('challenges/challenges.html')
+        # return HttpResponse(monthlyChallenges[month])
+        return HttpResponse(_template)
     else:
-        return HttpResponseNotFound('This month is not supported')
+        _template = render_to_string('challenges/default.html')
+        return HttpResponseNotFound(_template)
     
 def monthly_challenge_by_number(request, month):
     months = (list)(monthlyChallenges.keys())
     if month > len(months):
-        return HttpResponseNotFound('This month is not supported')
+        _template = render_to_string('challenges/default.html')
+        return HttpResponseNotFound(_template)
     else:
         month_name = months[month - 1]
         #reverse function is used to get the url of the view function by passing the name of the view function and the arguments required by the view function
