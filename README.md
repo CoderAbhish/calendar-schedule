@@ -209,3 +209,56 @@ TEMPLATES = [
     },
 ]
 ```
+### Commit 2 - Django Template Language & Variable Interpolation - https://docs.djangoproject.com/en/6.0/topics/templates/
+#### 1. Pass the dictionary variable as argument to the render or render_to_string functions 
+```python
+# option 1
+# challenges/views.py
+def monthly_challenge(request, month):
+    if month in monthlyChallenges:
+        _template = render_to_string('challenges/challenges.html', {
+            'text': monthlyChallenges[month],
+            'month_name': month
+        })
+        return HttpResponse(_template)
+    else:
+        _template = render_to_string('challenges/default.html')
+        return HttpResponseNotFound(_template)
+```
+```python
+# option 2
+# challenges/views.py
+from django.shortcuts import render
+
+...
+def monthly_challenge(request, month):
+    if month in monthlyChallenges:
+        #-------------------------------OR----------------------------------------
+
+        # remember that render function is a shortcut function that combines the render_to_string and HttpResponse functions
+        return render(request, 'challenges/challenges.html', {
+            'text': monthlyChallenges[month],
+            'month_name': month
+        })
+    else:
+        _template = render_to_string('challenges/default.html')
+        return HttpResponseNotFound(_template)
+```
+#### 2. Use the key of the dictionary argument to populate the corresponding value within the HTML - {{ <dict_key> }}
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ month_name }} Challenges</title>
+</head>
+<body>
+    <h2>
+        Challenge for {{ month_name }}!
+    </h2>
+    <li>
+        {{ text }}
+    </li>
+</body>
+</html>
+```

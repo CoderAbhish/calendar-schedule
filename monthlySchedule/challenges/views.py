@@ -23,9 +23,17 @@ def index(request):
 
 def monthly_challenge(request, month):
     if month in monthlyChallenges:
-        _template = render_to_string('challenges/challenges.html')
-        # return HttpResponse(monthlyChallenges[month])
-        return HttpResponse(_template)
+        # _template = render_to_string('challenges/challenges.html', {
+        #     'text': monthlyChallenges[month],
+        #     'month_name': month
+        # })
+        # return HttpResponse(_template)
+
+        # remember that render function is a shortcut function that combines the render_to_string and HttpResponse functions
+        return render(request, 'challenges/challenges.html', {
+            'text': monthlyChallenges[month],
+            'month_name': month
+        })
     else:
         _template = render_to_string('challenges/default.html')
         return HttpResponseNotFound(_template)
