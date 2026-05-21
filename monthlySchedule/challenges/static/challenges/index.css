@@ -1,0 +1,10 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: beige;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}

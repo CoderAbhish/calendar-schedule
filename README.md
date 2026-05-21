@@ -332,3 +332,54 @@ def monthly_challenge(request, month):
 {% endblock content %}
 
 ```
+### Commit 4 - Adding static files - https://docs.djangoproject.com/en/6.0/howto/static-files/#serving-static-files-during-development
+#### 1. Static Files local to app
+```css
+<!-- static/challenges/index.css -->
+ body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: beige;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+```
+```django
+<!-- load the static file on the html page -->
+<!-- templates/challenges/index.html -->
+{% load static %}
+...
+
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'challenges/index.css' %}">
+{% endblock static_files %}
+
+<!-- templates/base.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block page_title %}{% endblock page_title %}</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}"
+    {% block static_files %}{% endblock static_files %}
+</head>
+<body>
+    {% block content %}{% endblock content %}
+</body>
+</html>
+...
+```
+#### 2. Global Static Files
+```python
+# monthlySchedule/settings.py
+# referencing static files from the 'static' folder in the project directory
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
+```

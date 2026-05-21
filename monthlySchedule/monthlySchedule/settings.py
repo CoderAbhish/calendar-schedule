@@ -118,3 +118,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# referencing static files from the 'static' folder in the project directory
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
